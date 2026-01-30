@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB Viewer</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    h2 { margin-top: 2em; }
+    .collection { margin-left: 2em; }
+    .documents { margin-left: 4em; background: #f9f9f9; padding: 1em; border-radius: 5px; }
+    pre { background: #eee; padding: 0.5em; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <h1>MongoDB Viewer</h1>
+  <div id="content">Loading...</div>
+  <script>
+    async function fetchData() {
+      const res = await fetch('/data');
+      const data = await res.json();
+      const content = document.getElementById('content');
+      if (data.error) {
+        content.innerHTML = `<b>Error:</b> ${data.error}`;
+        return;
+      }
+      content.innerHTML = '';
+      data.forEach(db => {
+        const dbDiv = document.createElement('div');
+        dbDiv.innerHTML = `<h2>Database: ${db.name}</h2>`;
+        db.collections.forEach(col => {
+          const colDiv = document.createElement('div');
+          colDiv.className = 'collection';
+          colDiv.innerHTML = `<h3>Collection: ${col.name}</h3>`;
+          const docsDiv = document.createElement('div');
+          docsDiv.className = 'documents';
+          if (col.documents.length === 0) {
+            docsDiv.innerHTML = '<i>No documents</i>';
+          } else {
+            col.documents.forEach(doc => {
+              const pre = document.createElement('pre');
+              pre.textContent = JSON.stringify(doc, null, 2);
+              docsDiv.appendChild(pre);
+            });
+          }
+          colDiv.appendChild(docsDiv);
+          dbDiv.appendChild(colDiv);
+        });
+        content.appendChild(dbDiv);
+      });
+    }
+    fetchData();
+  </script>
+</body>
+</html>

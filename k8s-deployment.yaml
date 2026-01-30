@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: techtask-mongo-viewer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: techtask-mongo-viewer
+  template:
+    metadata:
+      labels:
+        app: techtask-mongo-viewer
+    spec:
+      serviceAccountName: techtask-sa
+      containers:
+        - name: techtask-mongo-viewer
+          image: wizacr32.azurecr.io/techtask-mongo-viewer:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: MONGO_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: techtask-mongo-viewer-config
+                  key: MONGO_URI

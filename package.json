@@ -1,0 +1,13 @@
+{
+  "name": "techtask-mongodb-viewer",
+  "version": "1.0.0",
+  "main": "app.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.22.1",
+    "mongodb": "^6.21.0"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}

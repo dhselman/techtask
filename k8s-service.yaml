@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: techtask-mongo-viewer-lb
+spec:
+  type: LoadBalancer
+  selector:
+    app: techtask-mongo-viewer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
